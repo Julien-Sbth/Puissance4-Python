@@ -46,6 +46,7 @@ class Puissance4:
 
     def jouer(self, colonne):
 
+
         if colonne < 0 or colonne > 6:
             print("Choisissez une colonne entre 1 et 7.")
             return
@@ -57,3 +58,5 @@ class Puissance4:
             print("Joueur " + str(self.joueur) + " a gagné !")
         else:
             self.joueur = 3 - self.joueur
+
+
