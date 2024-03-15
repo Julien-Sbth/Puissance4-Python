@@ -1,4 +1,5 @@
 import numpy as np
+from Jeu import Puissance4
 import tkinter as tk
 
 fen = tk.Tk()
@@ -11,65 +12,14 @@ for i in range(6):
 
 fen.mainloop()
 
-
 def main():
-    plateau = np.zeros((6, 7))
-    joueur = 1
-
-    print(plateau)
-    while (True):
-        a = -1
-
-        p = int(input("choisissez une colonne:"))-1
-        if p < 0 or p > 6:
-            print("Choisissez une colonne entre 1 et 7.")
-            continue
-
-        for i in reversed(range(len(plateau))):
-            if plateau[i][p] == 0:
-                plateau[i][p] = joueur
-                break
-        print(plateau)
-
-        if check_victoire(plateau, joueur):
-            print("Joueur " + str(joueur) + " a gagné !")
+    jeu = Puissance4()
+    print(jeu.plateau)
+    while True:
+        colonne = int(input("Choisissez une colonne:")) - 1
+        jeu.jouer(colonne)
+        if jeu.check_victoire():
             break
 
-        joueur = 3 - joueur
-
-
-def check_victoire(plateau, joueur):
-    return check_horizontal(plateau, joueur) or check_vertical(plateau, joueur) or check_diagonal_desc(plateau, joueur) or check_diagonal_asc(plateau, joueur)
-
-
-def check_horizontal(plateau, joueur):
-    for i in range(len(plateau)):
-        for j in range(len(plateau[i]) - 3):
-            if all(plateau[i][j+k] == joueur for k in range(4)):
-                return True
-    return False
-
-def check_vertical(plateau, joueur):
-    for i in range(len(plateau) - 3):
-        for j in range(len(plateau[i])):
-            if all(plateau[i+k][j] == joueur for k in range(4)):
-                return True
-    return False
-
-def check_diagonal_desc(plateau, joueur):
-    for i in range(len(plateau) - 3):
-        for j in range(len(plateau[i]) - 3):
-            if all(plateau[i+k][j+k] == joueur for k in range(4)):
-                return True
-    return False
-
-def check_diagonal_asc(plateau, joueur):
-    for i in range(3, len(plateau)):
-        for j in range(len(plateau[i]) - 3):
-            if all(plateau[i-k][j+k] == joueur for k in range(4)):
-                return True
-    return False
-
-
-
-main()
+if __name__ == "__main__":
+    main()
