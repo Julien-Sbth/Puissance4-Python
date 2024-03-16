@@ -1,4 +1,10 @@
+import csv
+import random as rand
+
 import numpy as np
+import keyboard
+
+from IA import IA
 from Jeu import Puissance4
 from Interface import Interface
 
