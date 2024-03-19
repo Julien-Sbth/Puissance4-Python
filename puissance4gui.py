@@ -36,13 +36,6 @@ class Puissance4GUI:
             return
         self.puissance4.joueur = 3 - self.puissance4.joueur
 
-        def jouer_contre_ia_action(self):
-            puissance4 = Puissance4()
-            ia = IA()
-            interface = Puissance4GUI(puissance4)
-            interface.set_ia(ia)  # Définition de l'IA
-            interface.run()
-
         def jouer(self, i, j):
             ligne = self.puissance4.jouer_coup(j)
             if ligne < 0:
