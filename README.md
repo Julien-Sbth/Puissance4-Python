@@ -3,3 +3,4 @@ Chaque joueur a sa propre couleur.
 Le jeu alterne entre les deux joueurs à
 chaque clic de souris. 
 methode change_color ajoutée
+Definir type de partie
