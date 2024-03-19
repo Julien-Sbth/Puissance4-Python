@@ -2,6 +2,7 @@ import tkinter as tk
 from IA import IA
 from Jeu import Puissance4
 
+
 class InterfaceGraphique:
     def __init__(self):
         self.fen = tk.Tk()
@@ -81,6 +82,7 @@ class InterfaceGraphique:
 
     def run(self):
         self.fen.mainloop()
+
 
 if __name__ == "__main__":
     interface = InterfaceGraphique()
