@@ -42,9 +42,9 @@ pip install numpy
 
 ## Auteurs
 
--Hamdoune Amoussa 
--Amadou Mbodj
--Julien Sabathe
+## Hamdoune Amoussa 
+## Amadou Mbodj
+## Julien Sabathe
 
 ## Licence
 
