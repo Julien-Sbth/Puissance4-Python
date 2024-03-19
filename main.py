@@ -5,7 +5,7 @@ from puissance4gui import Puissance4GUI
 class InterfaceGraphique:
     def __init__(self):
         self.fen = tk.Tk()
-        self.fen.title("Puissance 4")
+        self.fen.title("Menu Principal")
         self.btn_joueur = tk.Button(self.fen, text="Jouer contre un joueur", command=self.jouer_contre_joueur_action)
         self.btn_joueur.pack()
     def jouer_contre_joueur_action(self):
