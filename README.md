@@ -42,11 +42,9 @@ pip install numpy
 
 ## Auteurs
 
-Ce projet a été réalisé par : 
 -Hamdoune Amoussa 
 -Amadou Mbodj
--Julen Sabathe
-Dans le cadre d'un projet scolaire.
+-Julien Sabathe
 
 ## Licence
 
