@@ -62,9 +62,13 @@ class InterfaceGraphique:
                 self.cnv.itemconfig(self.cnv.find_closest(event.x, event.y), fill="red")
                 if self.jeu.check_victoire():
                     print("Vous avez gagné !")
+                    self.ia.enregistrer_resultat(self.jeu.plateau)
+                    self.ia.sauvegarder_donnees()
                     return
                 self.tour = 2
                 self.ia_joue()
+                self.ia.enregistrer_resultat(self.jeu.plateau)
+                self.ia.sauvegarder_donnees()
             else:
                 print("Attendez votre tour.")
 
@@ -76,7 +80,8 @@ class InterfaceGraphique:
             indice_canevas = coup_ia + (hauteur_colonne * 7)
             self.cnv.itemconfig(indice_canevas, fill="yellow")
             if self.jeu.check_victoire():
-                print("L'IA a gagné !")
+                print("Victoire de l'IA !")
+                self.ia.incrementer_victoires()
                 return
             self.tour = 1
 
