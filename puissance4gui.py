@@ -10,7 +10,6 @@ class Puissance4GUI:
         self.window.title("Puissance 4")
         self.buttons = []
 
-
         for i in range(6):
             row = []
             for j in range(7):
@@ -23,13 +22,10 @@ class Puissance4GUI:
         if self.puissance4.plateau[0][j] != 0:
             messagebox.showerror("Erreur", "Cette colonne est pleine !")
             return
-
         ligne = self.puissance4.jouer_coup(j)
         if ligne == -1:
             return
-
         self.buttons[ligne][j].config(bg="yellow" if self.puissance4.joueur == 1 else "red")
-
         if self.puissance4.verifier_victoire():
             messagebox.showinfo("Victoire", f"Le joueur {self.puissance4.joueur} a gagné !")
             self.window.quit()
@@ -41,7 +37,6 @@ class Puissance4GUI:
             if ligne < 0:
                 messagebox.showerror("Erreur", "Cette colonne est pleine !")
                 return
-
             self.buttons[ligne][j].config(bg="yellow" if self.puissance4.joueur == 1 else "red")
 
             if self.puissance4.verifier_victoire():
