@@ -112,11 +112,14 @@ class InterfaceGraphique:
 
     def ia_joue(self):
         coup_ia = self.ia.prendre_decision_intelligente(self.jeu.plateau)
-        hauteur_colonne = next((i for i, row in enumerate(self.jeu.plateau) if row[coup_ia] == 0), None)
-        if hauteur_colonne is not None:
+        ligne_vide = self.trouver_ligne_vide(colonne=coup_ia)
+        if ligne_vide is not None:
             self.jeu.jouer(coup_ia)
-            indice_canevas = coup_ia + (hauteur_colonne * 7)
-            self.cnv.itemconfig(indice_canevas, fill="yellow")
+            x = coup_ia * self.taille_carre + self.taille_carre / 2
+            y = ligne_vide * self.taille_carre + self.taille_carre / 2
+            trouver_indice_canevas = self.cnv.find_closest(x, y)
+            self.cnv.itemconfig(trouver_indice_canevas, fill="yellow")
+            print("L'IA a joué dans la colonne :", coup_ia)
             if self.jeu.check_victoire():
                 print("IA a gagné !")
                 return
