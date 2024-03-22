@@ -125,6 +125,8 @@ class InterfaceGraphique:
                 return
             self.tour = 1
 
+
+
     def boucle_principale(self):
         while True:
             if self.mode == "ia_vs_ia":
