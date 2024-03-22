@@ -16,6 +16,7 @@ class InterfaceGraphique:
         self.ia.charger_donnees()
         self.tour = 1
         self.mode = None
+        self.partie_terminee = False
 
         self.btn_rejouer = tk.Button(self.fen, text="Rejouer", command=self.rejouer_partie)
         self.btn_rejouer.grid(row=1, column=1, columnspan=3, padx=10, pady=10)
@@ -139,20 +140,22 @@ class InterfaceGraphique:
             self.tour = 1
 
     def boucle_principale(self):
-        while True:
-            if self.mode == "ia_vs_ia":
-                if self.tour == 1:
-                    self.ia_joue()
-                    self.ia.enregistrer_resultat(self.jeu.plateau)
-                    self.ia.sauvegarder_donnees()
-                    self.tour = 2
-                else:
-                    self.ia_joue()
-                    self.tour = 1
-                if self.jeu.check_victoire():
-                    print("Partie terminée !")
-                    return
-            time.sleep(1)
+        if self.mode == "ia_vs_ia":
+            if self.tour == 1:
+                self.ia_joue()
+                self.ia.enregistrer_resultat(self.jeu.plateau)
+                self.ia.sauvegarder_donnees()
+                self.tour = 2
+            else:
+                self.ia_joue()
+                self.tour = 1
+            if self.jeu.check_victoire():
+                print("Partie terminée !")
+                self.partie_terminee = True
+                return
+        if not self.partie_terminee:
+            self.fen.after(1000,
+            self.boucle_principale)
 
     def run(self):
         self.fen.mainloop()
