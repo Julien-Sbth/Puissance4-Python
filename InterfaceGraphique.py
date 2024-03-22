@@ -22,28 +22,28 @@ class InterfaceGraphique:
         self.btn_rejouer.grid(row=1, column=1, columnspan=3, padx=10, pady=10)
         self.btn_rejouer.config(state="active")
 
-        self.btn_joueur = tk.Button(self.fen, text="Jouer contre un joueur", command=self.jouer_contre_joueur_action)
+        self.btn_joueur = tk.Button(self.fen, text="Jouer contre un joueur", command=self.player_against_player)
         self.btn_joueur.grid(row=0, column=1, padx=10, pady=10)
 
-        self.btn_ia = tk.Button(self.fen, text="Jouer contre l'IA", command=self.jouer_contre_ia_action)
+        self.btn_ia = tk.Button(self.fen, text="Jouer contre l'IA", command=self.PlayerAgainstIA)
         self.btn_ia.grid(row=0, column=2, padx=10, pady=10)
 
-        self.btn_ia_vs_ia = tk.Button(self.fen, text="IA contre IA", command=self.ia_vs_ia_action)
+        self.btn_ia_vs_ia = tk.Button(self.fen, text="IA contre IA", command=self.IAvsIA)
         self.btn_ia_vs_ia.grid(row=0, column=3, padx=10, pady=10)
 
         self.creer_carres()
 
-    def jouer_contre_joueur_action(self):
+    def player_against_player(self):
         print("Jouer contre un joueur")
         self.mode = "joueur"
 
-    def jouer_contre_ia_action(self):
+    def PlayerAgainstIA(self):
         print("Jouer contre l'IA")
         self.mode = "ia"
         self.tour = 1
         self.ia.entrainer_IA()
 
-    def ia_vs_ia_action(self):
+    def IAvsIA(self):
         print("IA contre IA")
         self.mode = "ia_vs_ia"
         self.tour = 1
@@ -60,28 +60,9 @@ class InterfaceGraphique:
         self.cnv.delete("all")
         for i in range(7):
             for j in range(6):
-                valeur = self.jeu.plateau[j][i]
-                chiffre = self.associer_chiffre(valeur)
-                couleur = self.associer_couleur(chiffre) 
                 id = self.cnv.create_rectangle(i * self.taille_carre, j * self.taille_carre,
-                                               (i + 1) * self.taille_carre, (j + 1) * self.taille_carre, fill=couleur)
+                                               (i + 1) * self.taille_carre, (j + 1) * self.taille_carre, fill="white")
                 self.cnv.tag_bind(id, "<Button-1>", lambda event, col=i: self.jouer_coup(event, col))
-
-    def associer_chiffre(self, valeur):
-        if valeur == 1:
-            return 1  # Rouge
-        elif valeur == 2:
-            return 2  # Jaune
-        else:
-            return 0  # Blanc
-
-    def associer_couleur(self, chiffre):
-        if chiffre == 1:
-            return "red"
-        elif chiffre == 2:
-            return "yellow"
-        else:
-            return "white"
 
     def trouver_ligne_vide(self, colonne):
         for ligne in range(5, -1, -1):
@@ -154,8 +135,7 @@ class InterfaceGraphique:
                 self.partie_terminee = True
                 return
         if not self.partie_terminee:
-            self.fen.after(1000,
-            self.boucle_principale)
+            self.fen.after(1000, self.boucle_principale)
 
     def run(self):
         self.fen.mainloop()
