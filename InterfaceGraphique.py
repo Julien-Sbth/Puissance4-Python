@@ -1,7 +1,9 @@
+from tkinter import messagebox
 import time
 import tkinter as tk
 from Jeu import Puissance4
 from IA import IA
+
 
 class InterfaceGraphique:
     def __init__(self):
@@ -14,6 +16,10 @@ class InterfaceGraphique:
         self.ia.charger_donnees()
         self.tour = 1
         self.mode = None
+
+        self.btn_rejouer = tk.Button(self.fen, text="Rejouer", command=self.rejouer_partie)
+        self.btn_rejouer.grid(row=1, column=1, columnspan=3, padx=10, pady=10)
+        self.btn_rejouer.config(state="disabled")
 
         self.btn_joueur = tk.Button(self.fen, text="Jouer contre un joueur", command=self.jouer_contre_joueur_action)
         self.btn_joueur.grid(row=0, column=1, padx=10, pady=10)
@@ -43,7 +49,14 @@ class InterfaceGraphique:
         self.ia.entrainer_IA()
         self.boucle_principale()
 
+    def rejouer_partie(self):
+        self.jeu = Puissance4()
+        self.creer_carres()
+        self.tour = 1
+        self.btn_rejouer.config(state="normal")
+
     def creer_carres(self):
+        self.cnv.delete("all")
         for i in range(7):
             for j in range(6):
                 id = self.cnv.create_rectangle(i * self.taille_carre, j * self.taille_carre,
@@ -66,7 +79,8 @@ class InterfaceGraphique:
                                                               ligne_vide * self.taille_carre + self.taille_carre / 2),
                                         fill="red")
                     if self.jeu.check_victoire():
-                        print("Joueur 1 a gagné !")
+                        messagebox.showinfo("Fin de partie", "Vous avez gagné !")
+                        self.btn_rejouer.config(state="normal")
                         return
                     self.tour = 2
                 else:
@@ -76,6 +90,7 @@ class InterfaceGraphique:
                                         fill="yellow")
                     if self.jeu.check_victoire():
                         print("Joueur 2 a gagné !")
+                        messagebox.showinfo("You Win !", "Player Two Win !")
                         return
                     self.tour = 1
             else:
