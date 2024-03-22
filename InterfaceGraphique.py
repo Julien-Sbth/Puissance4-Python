@@ -19,7 +19,7 @@ class InterfaceGraphique:
 
         self.btn_rejouer = tk.Button(self.fen, text="Rejouer", command=self.rejouer_partie)
         self.btn_rejouer.grid(row=1, column=1, columnspan=3, padx=10, pady=10)
-        self.btn_rejouer.config(state="disabled")
+        self.btn_rejouer.config(state="active")
 
         self.btn_joueur = tk.Button(self.fen, text="Jouer contre un joueur", command=self.jouer_contre_joueur_action)
         self.btn_joueur.grid(row=0, column=1, padx=10, pady=10)
@@ -53,15 +53,34 @@ class InterfaceGraphique:
         self.jeu = Puissance4()
         self.creer_carres()
         self.tour = 1
-        self.btn_rejouer.config(state="normal")
+        self.btn_rejouer.config(state="active")
 
     def creer_carres(self):
         self.cnv.delete("all")
         for i in range(7):
             for j in range(6):
+                valeur = self.jeu.plateau[j][i]
+                chiffre = self.associer_chiffre(valeur)
+                couleur = self.associer_couleur(chiffre) 
                 id = self.cnv.create_rectangle(i * self.taille_carre, j * self.taille_carre,
-                                               (i + 1) * self.taille_carre, (j + 1) * self.taille_carre, fill="white")
+                                               (i + 1) * self.taille_carre, (j + 1) * self.taille_carre, fill=couleur)
                 self.cnv.tag_bind(id, "<Button-1>", lambda event, col=i: self.jouer_coup(event, col))
+
+    def associer_chiffre(self, valeur):
+        if valeur == 1:
+            return 1  # Rouge
+        elif valeur == 2:
+            return 2  # Jaune
+        else:
+            return 0  # Blanc
+
+    def associer_couleur(self, chiffre):
+        if chiffre == 1:
+            return "red"
+        elif chiffre == 2:
+            return "yellow"
+        else:
+            return "white"
 
     def trouver_ligne_vide(self, colonne):
         for ligne in range(5, -1, -1):
@@ -79,8 +98,8 @@ class InterfaceGraphique:
                                                               ligne_vide * self.taille_carre + self.taille_carre / 2),
                                         fill="red")
                     if self.jeu.check_victoire():
-                        messagebox.showinfo("Fin de partie", "Vous avez gagné !")
-                        self.btn_rejouer.config(state="normal")
+                        messagebox.showinfo("You Win !", "Player 1 Win !")
+                        self.btn_rejouer.config(state="active")
                         return
                     self.tour = 2
                 else:
@@ -89,8 +108,7 @@ class InterfaceGraphique:
                                                               ligne_vide * self.taille_carre + self.taille_carre / 2),
                                         fill="yellow")
                     if self.jeu.check_victoire():
-                        print("Joueur 2 a gagné !")
-                        messagebox.showinfo("You Win !", "Player Two Win !")
+                        messagebox.showinfo("You Lose !", "Player Two Win !")
                         return
                     self.tour = 1
             else:
@@ -103,7 +121,7 @@ class InterfaceGraphique:
                                                               colonne) * self.taille_carre + self.taille_carre / 2),
                                     fill="red")
                 if self.jeu.check_victoire():
-                    print("Vous avez gagné !")
+                    messagebox.showinfo("You Win !", "Player 1 Win !")
                     return
                 self.tour = 2
                 self.ia_joue()
@@ -115,11 +133,6 @@ class InterfaceGraphique:
         ligne_vide = self.trouver_ligne_vide(colonne=coup_ia)
         if ligne_vide is not None:
             self.jeu.jouer(coup_ia)
-            x = coup_ia * self.taille_carre + self.taille_carre / 2
-            y = ligne_vide * self.taille_carre + self.taille_carre / 2
-            trouver_indice_canevas = self.cnv.find_closest(x, y)
-            self.cnv.itemconfig(trouver_indice_canevas, fill="yellow")
-            print("L'IA a joué dans la colonne :", coup_ia)
             if self.jeu.check_victoire():
                 print("IA a gagné !")
                 return
