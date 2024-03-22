@@ -24,7 +24,7 @@ class IA:
     def enregistrer_resultat(self, plateau):
         flatten_board = [item for sublist in plateau for item in sublist]
         action = self.choisir_coup(plateau)
-        victoires = 0  # Initialise le nombre de victoires à 0 pour la nouvelle entrée
+        victoires = 0
         new_data = {'board': [flatten_board], 'action': [action], 'victoires': [victoires]}
         self.data = pd.concat([self.data, pd.DataFrame(new_data)], ignore_index=True)
 
@@ -49,7 +49,6 @@ class IA:
             print("Aucune donnée disponible pour l'entraînement.")
             return
 
-        # Créer un dictionnaire pour stocker les actions associées à chaque état de plateau
         self.plateau_actions = {}
 
         for index, row in self.data.iterrows():
@@ -61,7 +60,6 @@ class IA:
             else:
                 self.plateau_actions[board_state] = [action]
 
-        # Trouver l'action la plus fréquente pour chaque état de plateau
         self.meilleure_action = {}
         for board_state, actions in self.plateau_actions.items():
             self.meilleure_action[board_state] = max(set(actions), key=actions.count)
