@@ -17,12 +17,13 @@ class InterfaceGraphique:
         self.mode = None
 
         self.btn_joueur = tk.Button(self.fen, text="Jouer contre un joueur", command=self.jouer_contre_joueur_action)
-        self.btn_joueur.grid(row=0, column=0, padx=10, pady=10)
+        self.btn_joueur.grid(row=0, column=2, padx=10, pady=10)
 
         self.btn_ia = tk.Button(self.fen, text="Jouer contre l'IA", command=self.jouer_contre_ia_action)
         self.btn_ia.grid(row=0, column=1, padx=10, pady=10)
 
         self.creer_carres()
+
 
     def jouer_contre_joueur_action(self):
         print("Jouer contre un joueur")
@@ -44,14 +45,14 @@ class InterfaceGraphique:
         if self.mode == "joueur":
             if self.tour == 1:
                 self.jeu.jouer(colonne)
-                self.cnv.itemconfig(self.cnv.find_closest(event.x, event.y), fill="red")
+                self.cnv.itemconfig(self.cnv.find_closest(event.x, event.y), fill=self.couleur(self.tour))
                 if self.jeu.check_victoire():
                     print("Joueur 1 a gagné !")
                     return
                 self.tour = 2
             else:
                 self.jeu.jouer(colonne)
-                self.cnv.itemconfig(self.cnv.find_closest(event.x, event.y), fill="yellow")
+                self.cnv.itemconfig(self.cnv.find_closest(event.x, event.y), fill=self.couleur(self.tour))
                 if self.jeu.check_victoire():
                     print("Joueur 2 a gagné !")
                     return
@@ -59,7 +60,7 @@ class InterfaceGraphique:
         elif self.mode == "ia":
             if self.tour == 1:
                 self.jeu.jouer(colonne)
-                self.cnv.itemconfig(self.cnv.find_closest(event.x, event.y), fill="red")
+                self.cnv.itemconfig(self.cnv.find_closest(event.x, event.y), fill=self.couleur(self.tour))
                 if self.jeu.check_victoire():
                     print("Vous avez gagné !")
                     return
@@ -70,15 +71,21 @@ class InterfaceGraphique:
 
     def ia_joue(self):
         coup_ia = self.ia.choisir_coup(self.jeu.plateau)
-        hauteur_colonne = next((i for i, row in enumerate(self.jeu.plateau) if row[coup_ia] == 0), None)
+        hauteur_colonne = next((5 - i for i, row in enumerate(self.jeu.plateau[::-1]) if row[coup_ia] == 0), None)
         if hauteur_colonne is not None:
             self.jeu.jouer(coup_ia)
-            indice_canevas = coup_ia + (hauteur_colonne * 7)
+            indice_canevas = coup_ia + (5 - hauteur_colonne) * 7  # Calcul de l'indice dans le canevas tkinter
             self.cnv.itemconfig(indice_canevas, fill="yellow")
             if self.jeu.check_victoire():
                 print("L'IA a gagné !")
                 return
             self.tour = 1
+
+    def couleur(self,joueur):
+        if joueur == 1:
+            return "red"
+        else:
+            return "yellow"
 
     def run(self):
         self.fen.mainloop()

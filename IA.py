@@ -1,4 +1,5 @@
 import csv
+import random
 import random as rand
 import numpy as np
 
@@ -38,8 +39,11 @@ class IA:
         else:
             coups_valides = [colonne for colonne in range(self.nb_colonnes) if plateau[0][colonne] == 0]
             if coups_valides:
+                random.shuffle(coups_valides)  # Mélanger la liste des colonnes valides
                 scores_coups = [self.strategies[colonne] for colonne in coups_valides]
-                meilleur_coup = coups_valides[np.argmax(scores_coups)]
+                max_score = max(scores_coups)
+                meilleurs_coups = [coup for coup, score in zip(coups_valides, scores_coups) if score == max_score]
+                meilleur_coup = rand.choice(meilleurs_coups)
                 self.coups_joues.append(meilleur_coup)
                 return meilleur_coup
             else:
