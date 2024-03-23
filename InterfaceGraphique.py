@@ -57,11 +57,15 @@ class InterfaceGraphique:
 
     def creer_carres(self):
         self.cnv.delete("all")
+        self.carre_list = []
         for i in range(7):
+            row = []
             for j in range(6):
-                id = self.cnv.create_rectangle(i * self.taille_carre, j * self.taille_carre,
+                carre = self.cnv.create_rectangle(i * self.taille_carre, j * self.taille_carre,
                                                (i + 1) * self.taille_carre, (j + 1) * self.taille_carre, fill="white")
-                self.cnv.tag_bind(id, "<Button-1>", lambda event, col=i: self.jouer_coup(event, col))
+                self.cnv.tag_bind(carre, "<Button-1>", lambda event, col=i: self.jouer_coup(event, col))
+                row.append(carre)
+            self.carre_list.append(row)
 
     def trouver_ligne_vide(self, colonne):
         for ligne in range(5, -1, -1):
@@ -98,10 +102,7 @@ class InterfaceGraphique:
         elif self.mode == "ia":
             if self.tour == 1:
                 self.jeu.jouer(colonne)
-                self.cnv.itemconfig(self.cnv.find_closest(colonne * self.taille_carre + self.taille_carre / 2,
-                                                          self.trouver_ligne_vide(
-                                                              colonne) * self.taille_carre + self.taille_carre / 2),
-                                    fill="red")
+
                 if self.jeu.check_victoire():
                     print("Vous avez gagné !")
                     return
@@ -112,20 +113,21 @@ class InterfaceGraphique:
 
     def ia_joue(self):
         coup_ia = self.ia.prendre_decision_intelligente(self.jeu.plateau)
+
         ligne_vide = self.trouver_ligne_vide(colonne=coup_ia)
         if ligne_vide is not None:
             self.jeu.jouer(coup_ia)
-            x = coup_ia * self.taille_carre + self.taille_carre / 2
-            y = ligne_vide * self.taille_carre + self.taille_carre / 2
-            trouver_indice_canevas = self.cnv.find_closest(x, y)
-            self.cnv.itemconfig(trouver_indice_canevas, fill="yellow")
-            print("L'IA a joué dans la colonne :", coup_ia)
-            if self.jeu.check_victoire():
-                print("IA a gagné !")
-                return
-            self.tour = 1
+            self.update_plateau(self.jeu.plateau)
 
-
+    def update_plateau(self,plateau):
+        for i in range(plateau):
+            for j in range(plateau[i]):
+                if plateau[i][j]==0:
+                    self.cnv.itemconfig(self.carre_list[i][j], fill="white")
+                elif plateau[i][j]==1:
+                    self.cnv.itemconfig(self.carre_list[i][j],fill="red")
+                else:
+                    self.cnv.itemconfig(self.carre_list[i][j],fill="yellow")
 
     def boucle_principale(self):
         while True:
