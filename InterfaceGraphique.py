@@ -1,5 +1,4 @@
 from tkinter import messagebox
-import time
 import tkinter as tk
 from Jeu import Puissance4
 from IA import IA
@@ -48,7 +47,7 @@ class InterfaceGraphique:
         self.mode = "ia_vs_ia"
         self.tour = 1
         self.ia.entrainer_IA()
-        self.boucle_principale()
+        self.IAversusIA()
 
     def rejouer_partie(self):
         self.jeu = Puissance4()
@@ -82,7 +81,9 @@ class InterfaceGraphique:
                     if self.jeu.check_victoire():
                         messagebox.showinfo("You Win !", "Player 1 Win !")
                         self.btn_rejouer.config(state="active")
+                        self.rejouer_partie()
                         return
+
                     self.tour = 2
                 else:
                     self.jeu.jouer(colonne)
@@ -91,24 +92,36 @@ class InterfaceGraphique:
                                         fill="yellow")
                     if self.jeu.check_victoire():
                         messagebox.showinfo("You Lose !", "Player Two Win !")
+                        self.rejouer_partie()
                         return
                     self.tour = 1
             else:
-                print("Colonne pleine. Veuillez choisir une autre colonne.")
+                messagebox.showinfo("Colonne pleine", "Veuillez choisir une autre colonne.")
         elif self.mode == "ia":
-            if self.tour == 1:
-                self.jeu.jouer(colonne)
-                self.cnv.itemconfig(self.cnv.find_closest(colonne * self.taille_carre + self.taille_carre / 2,
-                                                          self.trouver_ligne_vide(
-                                                              colonne) * self.taille_carre + self.taille_carre / 2),
-                                    fill="red")
-                if self.jeu.check_victoire():
-                    messagebox.showinfo("You Win !", "Player 1 Win !")
+            ligne_vide = self.trouver_ligne_vide(colonne)
+            if ligne_vide is not None:  # Vérification de la colonne pleine
+                if self.tour == 1:
+                    self.jeu.jouer(colonne)
+                    self.cnv.itemconfig(
+                        self.cnv.find_closest(colonne * self.taille_carre + self.taille_carre / 2,
+                                              ligne_vide * self.taille_carre + self.taille_carre / 2),
+                        fill="red"
+                    )
+                    if self.jeu.check_victoire():
+                        messagebox.showinfo("You Win !", "Player 1 Win !")
+                        self.rejouer_partie()
+                        return
+                    self.tour = 2
+                    self.ia_joue()
+                else:
+                    messagebox.showinfo("You Lose !", "IA Win !")
+                    self.rejouer_partie()
                     return
-                self.tour = 2
-                self.ia_joue()
             else:
-                print("Attendez votre tour.")
+                messagebox.showinfo("Colonne pleine", "Veuillez choisir une autre colonne.")
+        else:
+            messagebox.showinfo("Colonne pleine", "Veuillez choisir une autre colonne.")
+
 
     def ia_joue(self):
         coup_ia = self.ia.prendre_decision_intelligente(self.jeu.plateau)
@@ -120,7 +133,7 @@ class InterfaceGraphique:
                 return
             self.tour = 1
 
-    def boucle_principale(self):
+    def IAversusIA(self):
         if self.mode == "ia_vs_ia":
             if self.tour == 1:
                 self.ia_joue()
@@ -135,7 +148,7 @@ class InterfaceGraphique:
                 self.partie_terminee = True
                 return
         if not self.partie_terminee:
-            self.fen.after(1000, self.boucle_principale)
+            self.fen.after(1000, self.IAversusIA)
 
     def run(self):
         self.fen.mainloop()
