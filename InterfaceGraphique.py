@@ -83,7 +83,6 @@ class InterfaceGraphique:
                         self.btn_rejouer.config(state="active")
                         self.rejouer_partie()
                         return
-
                     self.tour = 2
                 else:
                     self.jeu.jouer(colonne)
@@ -99,8 +98,9 @@ class InterfaceGraphique:
                 messagebox.showinfo("Colonne pleine", "Veuillez choisir une autre colonne.")
         elif self.mode == "ia":
             ligne_vide = self.trouver_ligne_vide(colonne)
-            if ligne_vide is not None:  # Vérification de la colonne pleine
+            if ligne_vide is not None:
                 if self.tour == 1:
+                    self.ia.charger_donnees()
                     self.jeu.jouer(colonne)
                     self.cnv.itemconfig(
                         self.cnv.find_closest(colonne * self.taille_carre + self.taille_carre / 2,
@@ -117,11 +117,8 @@ class InterfaceGraphique:
                     messagebox.showinfo("You Lose !", "IA Win !")
                     self.rejouer_partie()
                     return
-            else:
-                messagebox.showinfo("Colonne pleine", "Veuillez choisir une autre colonne.")
         else:
             messagebox.showinfo("Colonne pleine", "Veuillez choisir une autre colonne.")
-
 
     def ia_joue(self):
         coup_ia = self.ia.prendre_decision_intelligente(self.jeu.plateau)
@@ -136,6 +133,7 @@ class InterfaceGraphique:
     def IAversusIA(self):
         if self.mode == "ia_vs_ia":
             if self.tour == 1:
+                self.ia.charger_donnees()
                 self.ia_joue()
                 self.ia.enregistrer_resultat(self.jeu.plateau)
                 self.ia.sauvegarder_donnees()
