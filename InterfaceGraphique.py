@@ -94,7 +94,6 @@ class InterfaceGraphique:
                 else:
                     self.jeu.jouer(colonne)
                     self.update_plateau(self.jeu.plateau)
-
                     if self.jeu.check_victoire():
                         print("Joueur 2 a gagné !")
                         messagebox.showinfo("You Win !", "Player Two Win !")
@@ -102,7 +101,7 @@ class InterfaceGraphique:
                         return
                     self.tour = 1
             else:
-                print("Colonne pleine. Veuillez choisir une autre colonne.")
+                messagebox.showinfo("Colonne pleine", "Veuillez choisir une autre colonne.")
         elif self.mode == "ia":
             ligne_vide = self.trouver_ligne_vide(colonne)
             if ligne_vide is not None:
