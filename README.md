@@ -28,6 +28,7 @@ Le projet est organisé comme suit :
 
 ## Dépendances
 
+
 Ce projet utilise les bibliothèques suivantes :
 
 - NumPy : pour la manipulation de tableaux multidimensionnels.
