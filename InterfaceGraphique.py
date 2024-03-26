@@ -1,5 +1,4 @@
 from tkinter import messagebox
-import time
 import tkinter as tk
 from Jeu import Puissance4
 from IA import IA
@@ -76,7 +75,6 @@ class InterfaceGraphique:
             if self.jeu.plateau[ligne][colonne] == 0:
                 return ligne
         return None
-
     def jouer_coup(self, event, colonne):
         if self.mode == "joueur":
             ligne_vide = self.trouver_ligne_vide(colonne)
@@ -104,6 +102,7 @@ class InterfaceGraphique:
                 messagebox.showinfo("Colonne pleine", "Veuillez choisir une autre colonne.")
         elif self.mode == "ia":
             ligne_vide = self.trouver_ligne_vide(colonne)
+            self.recuperer_coup_joueur(colonne)
             if ligne_vide is not None:
                 if self.tour == 1:
                     self.ia.charger_donnees()
@@ -115,6 +114,7 @@ class InterfaceGraphique:
                         return
                     self.tour = 2
                     self.ia_joue()
+
                 else:
                     messagebox.showinfo("You Lose !", "IA Win !")
                     self.rejouer_partie()
@@ -125,13 +125,22 @@ class InterfaceGraphique:
     def ia_joue(self):
         coup_ia = self.ia.prendre_decision_intelligente(self.jeu.plateau)
         ligne_vide = self.trouver_ligne_vide(colonne=coup_ia)
+        self.recuperer_coup_ia(coup_ia)
+        print("colonne ia : ", coup_ia+1)
         if ligne_vide is not None:
             self.jeu.jouer(coup_ia)
             self.update_plateau(self.jeu.plateau)
             if self.jeu.check_victoire():
-                print("IA a gagné !")
                 return
             self.tour = 1
+
+    def recuperer_coup_joueur(self,colonne):
+        coupjoueur=colonne+1
+        print("colonnej:",coupjoueur)
+
+    def recuperer_coup_ia(self,colonne):
+        coupia=colonne+1
+        print("colonnej:",coupia)
 
     def update_plateau(self, plateau):
         for i in range(len(plateau)):
@@ -154,11 +163,18 @@ class InterfaceGraphique:
             else:
                 self.ia_joue()
                 self.tour = 1
+
             if self.jeu.check_victoire():
-                print("Partie terminée !")
+                if self.tour == 2:
+                    messagebox.showinfo("Victory !", "IA 1 Won !")
+                else:
+                    messagebox.showinfo("Victory !", "IA 1=2 Won !")
+
                 self.partie_terminee = True
                 self.btn_rejouer.config(state="normal")
+                self.rejouer_partie()
                 return
+
         if not self.partie_terminee:
             self.fen.after(1000, self.IAversusIA)
 
