@@ -1,12 +1,10 @@
 import os
-
 import numpy as np
 import pandas as pd
 
-
 class IA:
     def __init__(self):
-        self.data_file = 'data.xlsx'
+        self.data_file = 'data.csv'
         if os.path.isfile(self.data_file) and os.path.getsize(self.data_file) > 0:
             self.charger_donnees()
         else:
@@ -30,15 +28,15 @@ class IA:
 
     def sauvegarder_donnees(self):
         try:
-            self.data.to_excel(self.data_file, index=False)
+            self.data.to_csv(self.data_file, index=False)
         except Exception as e:
             print("Erreur lors de la sauvegarde des données :", e)
 
     def charger_donnees(self):
         try:
-            self.data = pd.read_excel(self.data_file, engine='openpyxl')
+            self.data = pd.read_csv(self.data_file)
         except FileNotFoundError:
-            print("Le fichier Excel n'existe pas encore.")
+            print("Le fichier CSV n'existe pas encore.")
             self.data = pd.DataFrame(columns=['board', 'action', 'victoires'])
         except Exception as e:
             print("Erreur lors du chargement des données :", e)
@@ -47,6 +45,10 @@ class IA:
     def entrainer_IA(self):
         if len(self.data) == 0:
             print("Aucune donnée disponible pour l'entraînement.")
+            return
+
+        if 'action' not in self.data.columns:
+            print("La colonne 'action' n'existe pas dans les données.")
             return
 
         self.plateau_actions = {}
@@ -59,13 +61,16 @@ class IA:
                 self.plateau_actions[board_state].append(action)
             else:
                 self.plateau_actions[board_state] = [action]
-
         self.meilleure_action = {}
         for board_state, actions in self.plateau_actions.items():
             self.meilleure_action[board_state] = max(set(actions), key=actions.count)
 
     def prendre_decision_intelligente(self, plateau):
         flatten_board = tuple([item for sublist in plateau for item in sublist])
+
+        if not hasattr(self, 'meilleure_action'):
+            print("L'attribut 'meilleure_action' n'a pas été défini.")
+            return self.choisir_coup(plateau)
 
         if flatten_board not in self.meilleure_action:
             print("Aucune stratégie n'a été apprise pour cet état de plateau. Utilisation d'une stratégie aléatoire.")
