@@ -110,6 +110,7 @@ class InterfaceGraphique:
                     self.update_plateau(self.jeu.plateau)
                     if self.jeu.check_victoire():
                         messagebox.showinfo("You Win !", "Player 1 Win !")
+                        self.ia.visualiser_donnees()
                         self.rejouer_partie()
                         return
                     self.tour = 2
@@ -168,7 +169,7 @@ class InterfaceGraphique:
                 if self.tour == 2:
                     messagebox.showinfo("Victory !", "IA 1 Won !")
                 else:
-                    messagebox.showinfo("Victory !", "IA 1=2 Won !")
+                    messagebox.showinfo("Victory !", "IA 2 Won !")
 
                 self.partie_terminee = True
                 self.btn_rejouer.config(state="normal")
